@@ -24,3 +24,4 @@ class SettingsGroup {
 
   SettingsGroup({required this.header, required this.settingItem});
 }
+

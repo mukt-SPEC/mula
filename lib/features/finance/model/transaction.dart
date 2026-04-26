@@ -21,14 +21,12 @@ class TransactionModel extends HiveObject {
   @HiveField(4)
   final TransactionType type;
 
-  // Nullable because 'income' might not need a category
   @HiveField(5)
   final String? categoryid;
 
   @HiveField(6)
   final bool isRecurring;
 
-  // The RRULE string from the recurrence package
   @HiveField(7)
   final String? recurrenceRule;
 
@@ -43,7 +41,6 @@ class TransactionModel extends HiveObject {
     this.recurrenceRule,
   });
 
-  // Optional but helpful: A copyWith method makes updating state in Riverpod much easier
   TransactionModel copyWith({
     String? id,
     String? title,
@@ -66,3 +63,4 @@ class TransactionModel extends HiveObject {
     );
   }
 }
+

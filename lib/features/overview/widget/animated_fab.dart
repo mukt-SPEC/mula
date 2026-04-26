@@ -79,7 +79,7 @@ class _AnimatedFabOverlayState extends State<AnimatedFabOverlay>
 
         return Positioned(
           right: endOffset * t,
-          bottom: 12, // Center vertically within the 64px height (40px FAB = 12px padding)
+          bottom: 12, 
           child: IgnorePointer(
             ignoring: _controller.value == 0,
             child: Opacity(
@@ -187,3 +187,4 @@ class _AnimatedFabOverlayState extends State<AnimatedFabOverlay>
     );
   }
 }
+

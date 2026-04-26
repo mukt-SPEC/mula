@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mula/shared/theme/text_styles.dart';
 
 class SpendingVelocityChart extends StatelessWidget {
-  /// 7 values, one per weekday (Mon–Sun).
   final List<double> weeklySpending;
-  final double velocityPercent; // positive = faster, negative = slower
+  final double velocityPercent; 
   final double budgetRemaining;
 
   const SpendingVelocityChart({
@@ -39,7 +38,6 @@ class SpendingVelocityChart extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -92,7 +90,6 @@ class SpendingVelocityChart extends StatelessWidget {
           ),
           const SizedBox(height: 28),
 
-          // Bar chart
           SizedBox(
             height: 120,
             child: BarChart(
@@ -177,7 +174,6 @@ class SpendingVelocityChart extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Budget remaining footer
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
@@ -212,3 +208,4 @@ class SpendingVelocityChart extends StatelessWidget {
     );
   }
 }
+

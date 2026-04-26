@@ -200,70 +200,73 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
         : _defaultInstruction;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE8EAF2),
+      backgroundColor: const Color(0xFFF5F8FF),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxWidth: 520,
-                    minHeight: constraints.maxHeight - 40,
+                    minHeight: constraints.maxHeight,
                   ),
                   child: IntrinsicHeight(
                     child: Column(
                       children: [
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 60),
                         _buildHeaderBadge(),
-                        const SizedBox(height: 26),
+                        const SizedBox(height: 32),
                         const Text(
                           'Identity Verification',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Color(0xFF07285A),
-                            fontSize: 50,
+                            color: Color(0xFF001A3F),
+                            fontSize: 34,
                             fontWeight: FontWeight.w800,
-                            letterSpacing: -1,
+                            letterSpacing: -0.5,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         const Text(
                           'We need to perform a quick liveness check',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Color(0xFF474D58),
-                            fontSize: 17,
+                            color: Color(0xFF4A5568),
+                            fontSize: 16,
                             fontWeight: FontWeight.w400,
+                            height: 1.5,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 24),
                         _buildInstructionPill(statusMessage),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 32),
                         _buildCameraCircle(),
-                        const SizedBox(height: 26),
+                        const SizedBox(height: 32),
                         _buildEncryptedPill(),
                         const Spacer(),
+                        const SizedBox(height: 24),
                         _buildPrimaryButton(
                           label: actionLabel,
                           enabled: canStart,
                         ),
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 16),
                         TextButton(
                           onPressed: _isResetting ? null : _resetLivenessCheck,
                           style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFF0E56D3),
+                            foregroundColor: const Color(0xFF1E6AFF),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                           ),
                           child: Text(
                             _isResetting ? 'Resetting...' : 'Cancel',
                             style: const TextStyle(
                               fontSize: 17,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
@@ -283,9 +286,9 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
   String get _primaryActionLabel {
     switch (_uiPhase) {
       case _LivenessUiPhase.initializing:
-        return 'Preparing camera...';
+        return 'Preparing...';
       case _LivenessUiPhase.running:
-        return 'Verification in progress';
+        return 'Verifying...';
       case _LivenessUiPhase.success:
         return 'Verified';
       case _LivenessUiPhase.error:
@@ -296,36 +299,33 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
 
   Widget _buildHeaderBadge() {
     return Container(
-      width: 96,
-      height: 96,
-      decoration: BoxDecoration(
-        color: const Color(0xFFC8D5EE),
+      width: 80,
+      height: 80,
+      decoration: const BoxDecoration(
+        color: Color(0xFFD6E4FF),
         shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
       alignment: Alignment.center,
-      child: const Icon(Icons.face_rounded, size: 44, color: Color(0xFF0A2A5A)),
+      child: const Icon(
+        Icons.face_retouching_natural_rounded,
+        size: 36,
+        color: Color(0xFF001A3F),
+      ),
     );
   }
 
   Widget _buildInstructionPill(String text) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFD2DEEF),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFB8C6DE)),
+        color: const Color(0xFFE8F1FF),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFC0D7FF)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -334,8 +334,8 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
         children: [
           const Icon(
             Icons.info_outline_rounded,
-            size: 24,
-            color: Color(0xFF115DDE),
+            size: 20,
+            color: Color(0xFF1E6AFF),
           ),
           const SizedBox(width: 10),
           Flexible(
@@ -344,9 +344,8 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Color(0xFF1A2B45),
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -361,45 +360,35 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
         _uiPhase == _LivenessUiPhase.running &&
         previewController != null &&
         previewController.value.isInitialized;
-    final circleSize = math.min(MediaQuery.sizeOf(context).width * 0.74, 430.0);
+    final circleSize = math.min(MediaQuery.sizeOf(context).width * 0.78, 380.0);
 
-    return SizedBox(
+    return Container(
       width: circleSize,
       height: circleSize,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF0D53D9), width: 7),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF0A4DD5).withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(6),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color(0xFF2E6FF5), width: 2.5),
-            ),
-            child: ClipOval(
-              child: ColoredBox(
-                color: const Color(0xFFB8C7E0),
-                child: showLivePreview
-                    ? _buildLivePreview(previewController!)
-                    : const Center(
-                        child: Icon(
-                          Icons.videocam_outlined,
-                          size: 86,
-                          color: Color(0xFFAAB9D2),
-                        ),
-                      ),
-              ),
-            ),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFF1E6AFF), width: 6),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF1E6AFF).withOpacity(0.1),
+            blurRadius: 20,
+            spreadRadius: 5,
           ),
+        ],
+      ),
+      padding: const EdgeInsets.all(4),
+      child: ClipOval(
+        child: ColoredBox(
+          color: const Color(0xFFE2E8F0),
+          child: showLivePreview
+              ? _buildLivePreview(previewController!)
+              : const Center(
+                  child: Icon(
+                    Icons.videocam_outlined,
+                    size: 80,
+                    color: Color(0xFFCBD5E0),
+                  ),
+                ),
         ),
       ),
     );
@@ -423,22 +412,22 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
 
   Widget _buildEncryptedPill() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFE6EAF1),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: const Color(0xFFD0D7E4)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
-      child: const Row(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.shield_rounded, size: 25, color: Color(0xFF072C63)),
-          SizedBox(width: 10),
+          const Icon(Icons.shield_rounded, size: 16, color: Color(0xFF001A3F)),
+          const SizedBox(width: 8),
           Text(
             'End-to-end encrypted',
             style: TextStyle(
-              color: Color(0xFF777D88),
-              fontSize: 18,
+              color: const Color(0xFF718096),
+              fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -450,17 +439,17 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
   Widget _buildPrimaryButton({required String label, required bool enabled}) {
     return SizedBox(
       width: double.infinity,
-      height: 64,
+      height: 56,
       child: ElevatedButton(
         onPressed: enabled ? _startVerification : null,
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: const Color(0xFF0F5DE0),
-          disabledBackgroundColor: const Color(0xFFD1D6E2),
+          backgroundColor: const Color(0xFF001A3F),
+          disabledBackgroundColor: const Color(0xFFE2E8F0),
           foregroundColor: Colors.white,
-          disabledForegroundColor: Colors.white.withOpacity(0.7),
+          disabledForegroundColor: const Color(0xFFA0AEC0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
         child: Row(
@@ -469,18 +458,16 @@ class _LivenessCheckViewState extends State<LivenessCheckView> {
             Text(
               label,
               style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.2,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            if (enabled) ...[
-              const SizedBox(width: 8),
-              const Icon(Icons.arrow_forward_rounded, size: 24),
-            ],
+            const SizedBox(width: 8),
+            const Icon(Icons.arrow_forward_rounded, size: 20),
           ],
         ),
       ),
     );
   }
 }
+

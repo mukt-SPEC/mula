@@ -16,11 +16,10 @@ class BudgetNotifier extends AsyncNotifier<List<BudgetModel>> {
     state = await AsyncValue.guard(() async {
       final box = ref.read(budgetBoxProvider);
       
-      // Look for existing budget for this category
       String? existingBudgetId;
       for (final budget in box.values) {
         if (budget.categoryid == categoryId) {
-          existingBudgetId = budget.key.toString(); // Hive keys
+          existingBudgetId = budget.key.toString(); 
           break;
         }
       }
@@ -33,7 +32,7 @@ class BudgetNotifier extends AsyncNotifier<List<BudgetModel>> {
       if (existingBudgetId != null && box.containsKey(existingBudgetId)) {
         await box.put(existingBudgetId, budget);
       } else {
-        await box.add(budget); // Auto increment key
+        await box.add(budget); 
       }
 
       return box.values.toList();
@@ -60,3 +59,4 @@ final budgetNotifierProvider =
     AsyncNotifierProvider<BudgetNotifier, List<BudgetModel>>(() {
   return BudgetNotifier();
 });
+

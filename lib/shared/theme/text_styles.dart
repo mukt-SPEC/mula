@@ -51,7 +51,7 @@ class AppTextStyles {
   );
 
   static TextStyle get bodySmall => GoogleFonts.geist(
-    fontSize: 12, // Base size
+    fontSize: 12, 
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
   );
@@ -63,7 +63,7 @@ class AppTextStyles {
   );
 
   static TextStyle get labelMedium => GoogleFonts.geist(
-    fontSize: 12, // Base size
+    fontSize: 12, 
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
   );
@@ -74,7 +74,6 @@ class AppTextStyles {
     letterSpacing: 0.5,
   );
 
-  // --- Geist Mono ---
 
   static TextStyle get monoDisplay =>
       GoogleFonts.geistMono(fontSize: 32, fontWeight: FontWeight.w600);
@@ -95,14 +94,15 @@ class AppTextStyles {
   );
 
   static TextStyle get monoBodySmall => GoogleFonts.geistMono(
-    fontSize: 12, // Base size
+    fontSize: 12, 
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
   );
 
   static TextStyle get monoLabel => GoogleFonts.geistMono(
-    fontSize: 12, // Base size
+    fontSize: 12, 
     fontWeight: FontWeight.w500,
     letterSpacing: 0.5,
   );
 }
+

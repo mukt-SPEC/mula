@@ -7,29 +7,23 @@ import 'package:mula/features/finance/notifier/budget_notifier.dart';
 import 'package:mula/features/finance/notifier/category_notifier.dart';
 import 'package:mula/features/finance/notifier/transaction_notifier.dart';
 
-/// Aggregated analytics snapshot derived from live app data.
 class InsightsData {
   final List<TransactionModel> transactions;
   final List<BudgetModel> budgets;
   final List<CategoryModel> categories;
 
-  // --- Computed fields ---
   final double totalIncome;
   final double totalExpense;
   final double totalBudget;
-  final double budgetUtilizationPercent; // 0–100
+  final double budgetUtilizationPercent; 
   final double budgetRemaining;
 
-  /// Daily spending for the current month (index = day-of-month, value = sum of expenses).
   final List<double> dailySpending;
 
-  /// Weekly spending for the last 7 days indexed MON–SUN.
   final List<double> weeklySpending;
 
-  /// Per-category spending totals (only expense transactions).
   final Map<String, double> categorySpending;
 
-  /// Current month name, e.g. "September".
   final String currentMonth;
 
   InsightsData({
@@ -50,9 +44,6 @@ class InsightsData {
   double get netBalance => totalIncome - totalExpense;
 }
 
-// ---------------------------------------------------------------------------
-// Provider
-// ---------------------------------------------------------------------------
 
 final insightsProvider = Provider<AsyncValue<InsightsData>>((ref) {
   final txAsync = ref.watch(transactionNotifierProvider);
@@ -91,11 +82,9 @@ InsightsData _compute(
   double totalExpense = 0;
   final Map<String, double> categorySpending = {};
 
-  // Daily spending for the current month (1-indexed → 0-indexed array)
   final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
   final dailySpending = List<double>.filled(daysInMonth, 0.0);
 
-  // Weekly spending: indexed 0=Mon … 6=Sun, over the last 7 days
   final weeklySpending = List<double>.filled(7, 0.0);
   final sevenDaysAgo = now.subtract(const Duration(days: 7));
 
@@ -105,18 +94,14 @@ InsightsData _compute(
     } else {
       totalExpense += t.amount;
 
-      // Daily (current month only)
       if (t.date.year == now.year && t.date.month == now.month) {
         dailySpending[t.date.day - 1] += t.amount;
       }
 
-      // Weekly (last 7 days)
       if (t.date.isAfter(sevenDaysAgo)) {
-        // weekday: 1=Mon, 7=Sun  →  index 0–6
         weeklySpending[t.date.weekday - 1] += t.amount;
       }
 
-      // Category breakdown
       if (t.categoryid != null) {
         categorySpending[t.categoryid!] =
             (categorySpending[t.categoryid!] ?? 0) + t.amount;
@@ -146,3 +131,4 @@ InsightsData _compute(
     currentMonth: monthNames[now.month - 1],
   );
 }
+

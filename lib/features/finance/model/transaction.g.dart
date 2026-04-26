@@ -1,10 +1,6 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'transaction.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
 
 class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
   @override
@@ -60,3 +56,4 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+

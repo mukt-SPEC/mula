@@ -24,7 +24,6 @@ class AllocationDonutChart extends StatefulWidget {
 class _AllocationDonutChartState extends State<AllocationDonutChart> {
   int _touchedIndex = -1;
 
-  // Palette for slices
   static const _palette = [
     Color(0xFF022A72),
     Color(0xFF2563EB),
@@ -40,7 +39,6 @@ class _AllocationDonutChartState extends State<AllocationDonutChart> {
   Widget build(BuildContext context) {
     final format = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
 
-    // Build (category, budget, color) map
     final slices = <({CategoryModel cat, BudgetModel budget, Color color})>[];
     for (int i = 0; i < widget.budgets.length; i++) {
       final b = widget.budgets[i];
@@ -65,7 +63,6 @@ class _AllocationDonutChartState extends State<AllocationDonutChart> {
 
     return Column(
       children: [
-        // Donut + total
         SizedBox(
           height: 180,
           child: Stack(
@@ -105,7 +102,6 @@ class _AllocationDonutChartState extends State<AllocationDonutChart> {
                   }),
                 ),
               ),
-              // Center label
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -131,7 +127,6 @@ class _AllocationDonutChartState extends State<AllocationDonutChart> {
         ),
         const SizedBox(height: 16),
 
-        // Legend
         ...slices.map((s) {
           final pct = widget.totalAllocated > 0
               ? (s.budget.allocatedAmount / widget.totalAllocated * 100)
@@ -173,3 +168,4 @@ class _AllocationDonutChartState extends State<AllocationDonutChart> {
     );
   }
 }
+

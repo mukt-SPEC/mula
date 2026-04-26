@@ -7,6 +7,7 @@ import 'package:mula/features/finance/model/category_model.dart';
 import 'package:mula/features/finance/model/transaction.dart';
 import 'package:mula/features/finance/notifier/category_notifier.dart';
 import 'package:mula/features/finance/notifier/transaction_notifier.dart';
+import 'package:mula/features/finance/utils/category_icon_resolver.dart';
 import 'package:mula/shared/theme/text_styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rrule/rrule.dart';
@@ -77,7 +78,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
       }
     }
 
-    // Since we don't have uuid installed and need a unique ID, we'll use timestamp
     final String newId = DateTime.now().millisecondsSinceEpoch.toString();
 
     String? ruleString;
@@ -126,7 +126,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Segmented Control
               Container(
                 height: 50,
                 decoration: BoxDecoration(
@@ -192,7 +191,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
               ),
               const SizedBox(height: 24),
 
-              // Amount Card
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -241,7 +239,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
               ),
               const SizedBox(height: 24),
 
-              // Category Section (Only for Expense)
               if (_selectedType == TransactionType.expense) ...[
                 Text(
                   'CATEGORY',
@@ -259,7 +256,7 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
                         return GestureDetector(
                           onTap: () => setState(() => _selectedCategory = cat),
                           child: Container(
-                            width: (MediaQuery.of(context).size.width - 48 - 24) / 3, // 3 cols
+                            width: (MediaQuery.of(context).size.width - 48 - 24) / 3, 
                             height: 100,
                             decoration: BoxDecoration(
                               color: isSelected ? const Color(0xFF021742) : Colors.white,
@@ -269,7 +266,7 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  IconData(cat.iconCodePoint, fontFamily: 'MaterialIcons'),
+                                  resolveCategoryIcon(cat.iconCodePoint),
                                   color: isSelected ? Colors.white : const Color(0xFF0F172A),
                                   size: 32,
                                 ),
@@ -294,7 +291,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
                 const SizedBox(height: 32),
               ],
 
-              // Date Picker
               InkWell(
                 onTap: () async {
                   final newDate = await showDatePicker(
@@ -330,7 +326,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
               ),
               const SizedBox(height: 24),
 
-              // Notes Input
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -362,7 +357,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
               ),
               const SizedBox(height: 32),
 
-              // Recurring Switch
               Row(
                 children: [
                   Icon(PhosphorIconsRegular.arrowsClockwise, color: const Color(0xFFCBD5E1), size: 28),
@@ -420,7 +414,6 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
               
               const SizedBox(height: 40),
 
-              // Save Button
               ElevatedButton(
                 onPressed: _saveTransaction,
                 style: ElevatedButton.styleFrom(
@@ -442,3 +435,4 @@ class _TransactionPageState extends ConsumerState<TransactionPage> {
     );
   }
 }
+

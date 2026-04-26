@@ -8,7 +8,6 @@ class TransactionNotifier extends AsyncNotifier<List<TransactionModel>> {
   @override
   FutureOr<List<TransactionModel>> build() async {
     final box = ref.watch(transactionBoxProvider);
-    // Convert Hive box values to a list and sort by date
     return box.values.toList()..sort((a, b) => b.date.compareTo(a.date));
   }
 
@@ -24,7 +23,7 @@ class TransactionNotifier extends AsyncNotifier<List<TransactionModel>> {
   Future<void> deleteTransaction(String id) async {
     final box = ref.read(transactionBoxProvider);
     await box.delete(id);
-    ref.invalidateSelf(); // Refresh the list
+    ref.invalidateSelf(); 
   }
 }
 

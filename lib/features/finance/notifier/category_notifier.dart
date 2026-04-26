@@ -10,7 +10,6 @@ class CategoryNotifier extends AsyncNotifier<List<CategoryModel>> {
   FutureOr<List<CategoryModel>> build() async {
     final box = await Hive.openBox<CategoryModel>('categories_v2');
 
-    // Seed initial categories if the box is empty
     if (box.isEmpty) {
       await _seedDefaultCategories(box);
     }
@@ -31,15 +30,10 @@ class CategoryNotifier extends AsyncNotifier<List<CategoryModel>> {
     }
   }
 
-  /// Returns the newly created [CategoryModel] on success, or [null] if a
-  /// category with the same name already exists. The caller should use the
-  /// returned model directly instead of re-reading this provider's value
-  /// (which may be in a loading state right after [invalidateSelf] is called).
   Future<CategoryModel?> addCustomCategory(
       String name, int iconCodePoint, int colorValue) async {
     final box = Hive.box<CategoryModel>('categories_v2');
 
-    // Duplicate-name prevention (case-insensitive)
     final nameFormatted = name.trim().toLowerCase();
     final exists = box.values
         .any((cat) => cat.name.trim().toLowerCase() == nameFormatted);
@@ -53,7 +47,7 @@ class CategoryNotifier extends AsyncNotifier<List<CategoryModel>> {
     );
     await box.put(newCat.id, newCat);
     ref.invalidateSelf();
-    return newCat; // Return the model directly — no provider read required
+    return newCat; 
   }
 }
 
@@ -61,3 +55,4 @@ final categoryNotifierProvider =
     AsyncNotifierProvider<CategoryNotifier, List<CategoryModel>>(() {
   return CategoryNotifier();
 });
+

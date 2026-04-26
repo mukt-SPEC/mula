@@ -1,10 +1,6 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'budget.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
 
 class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
   @override
@@ -42,3 +38,4 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+

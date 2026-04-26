@@ -101,3 +101,4 @@ class LedgerViewAllPage extends ConsumerWidget {
     );
   }
 }
+

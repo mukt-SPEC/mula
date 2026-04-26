@@ -94,7 +94,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
 
-        // surfaceTintColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -107,14 +106,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 decoration: BoxDecoration(
                   color: Color(0xfff7f7f7),
                   borderRadius: BorderRadius.circular(12),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.grey.withOpacity(0.1),
-                  //     spreadRadius: 2,
-                  //     blurRadius: 5,
-                  //     offset: Offset(0, 2),
-                  //   ),
-                  // ],
                 ),
                 child: Row(
                   spacing: 8,
@@ -225,3 +216,4 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 }
+

@@ -7,9 +7,6 @@ import 'package:mula/shared/theme/text_styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class NewCategoryPage extends ConsumerStatefulWidget {
-  /// When [existingCategoryId] is provided the page runs in "set budget" mode:
-  /// the name & icon are pre-filled and read-only, and no new category is
-  /// created on save — only the budget is updated.
   final String? existingCategoryId;
   final String? prefillName;
   final IconData? prefillIcon;
@@ -87,7 +84,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
         budgetText.isEmpty ? 0.0 : (double.tryParse(budgetText) ?? 0.0);
 
     if (_isExisting) {
-      // ── Existing category: only update the budget ──────────────────────────
       if (budgetAmount > 0) {
         await ref
             .read(budgetNotifierProvider.notifier)
@@ -108,16 +104,11 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
       return;
     }
 
-    // ── New category flow ───────────────────────────────────────────────────
-    // addCustomCategory now returns the created model directly, so we never
-    // need to re-read the provider (which would be in AsyncLoading after
-    // invalidateSelf() and return null).
     final createdCat = await ref
         .read(categoryNotifierProvider.notifier)
         .addCustomCategory(name, _selectedIcon.codePoint, 0xFF021742);
 
     if (createdCat == null) {
-      // Duplicate name
       if (mounted) {
         setState(() => _isSaving = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -127,7 +118,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
       return;
     }
 
-    // Optionally attach a budget (any positive amount is valid — no upper cap)
     if (budgetAmount > 0) {
       await ref
           .read(budgetNotifierProvider.notifier)
@@ -165,7 +155,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Details card ──────────────────────────────────────────────
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -262,7 +251,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
                       ),
                     ),
 
-                    // Notes — only shown when creating a brand-new category
                     if (!_isExisting) ...[
                       const SizedBox(height: 32),
                       Row(
@@ -308,7 +296,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
               ),
               const SizedBox(height: 24),
 
-              // ── Budget card ───────────────────────────────────────────────
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -386,7 +373,6 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
               ),
               const SizedBox(height: 48),
 
-              // ── Save button ───────────────────────────────────────────────
               ElevatedButton(
                 onPressed: _isSaving ? null : _save,
                 style: ElevatedButton.styleFrom(
@@ -420,3 +406,4 @@ class _NewCategoryPageState extends ConsumerState<NewCategoryPage> {
     );
   }
 }
+

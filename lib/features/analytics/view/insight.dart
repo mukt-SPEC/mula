@@ -57,15 +57,12 @@ class _InsightPageState extends ConsumerState<InsightPage>
 
     return CustomScrollView(
       slivers: [
-        // ── App Bar ──────────────────────────────────────────────────────────
         SliverToBoxAdapter(child: _buildAppBar()),
 
-        // ── Hero Header ──────────────────────────────────────────────────────
         SliverToBoxAdapter(
           child: _buildHeroHeader(data, format, compactFormat),
         ),
 
-        // ── Spending Velocity Chart ──────────────────────────────────────────
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -77,22 +74,18 @@ class _InsightPageState extends ConsumerState<InsightPage>
           ),
         ),
 
-        // ── Monthly Overview Banner ──────────────────────────────────────────
         SliverToBoxAdapter(
           child: _buildMonthlyOverviewBanner(data, format),
         ),
 
-        // ── Allocation Donut ─────────────────────────────────────────────────
         SliverToBoxAdapter(
           child: _buildAllocationCard(data),
         ),
 
-        // ── Smart Suggestions ────────────────────────────────────────────────
         SliverToBoxAdapter(
           child: _buildSmartSuggestions(data, compactFormat),
         ),
 
-        // ── Smart Allocation Banner ──────────────────────────────────────────
         SliverToBoxAdapter(
           child: _buildSmartAllocationBanner(data),
         ),
@@ -102,9 +95,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // App Bar
-  // ---------------------------------------------------------------------------
   Widget _buildAppBar() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
@@ -152,7 +142,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
           ),
           const SizedBox(height: 16),
 
-          // Daily / Weekly / Monthly tab
           Container(
             height: 40,
             padding: const EdgeInsets.all(4),
@@ -192,13 +181,9 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Hero – Spending Velocity + line graph
-  // ---------------------------------------------------------------------------
   Widget _buildHeroHeader(
       InsightsData data, NumberFormat fmt,
       NumberFormat compact) {
-    // Build daily line-chart for the small hero chart
     final spots = <FlSpot>[];
     for (int i = 0; i < data.dailySpending.length; i++) {
       spots.add(FlSpot(i.toDouble(), data.dailySpending[i]));
@@ -274,7 +259,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
 
             const SizedBox(height: 20),
 
-            // mini line chart – daily spending this month
             SizedBox(
               height: 100,
               child: LineChart(
@@ -293,7 +277,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
                         showTitles: true,
                         reservedSize: 22,
                         getTitlesWidget: (val, meta) {
-                          // Show week labels
                           const labels = ['W1', 'W2', 'W3', 'W4'];
                           final idx = (val / 7).floor();
                           if (val % 7 == 0 &&
@@ -339,7 +322,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
 
             const SizedBox(height: 16),
 
-            // Budget remaining footer chip
             Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -376,13 +358,10 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Monthly Overview Banner
-  // ---------------------------------------------------------------------------
   Widget _buildMonthlyOverviewBanner(InsightsData data, NumberFormat fmt) {
     final utilInt = data.budgetUtilizationPercent.toInt();
     final willStayOnTrack =
-        data.budgetUtilizationPercent < 85; // heuristic
+        data.budgetUtilizationPercent < 85; 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       child: Column(
@@ -429,7 +408,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
           ),
           const SizedBox(height: 16),
 
-          // Total spent card
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -491,9 +469,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Allocation Donut
-  // ---------------------------------------------------------------------------
   Widget _buildAllocationCard(InsightsData data) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -542,9 +517,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Smart Suggestions
-  // ---------------------------------------------------------------------------
   Widget _buildSmartSuggestions(InsightsData data, NumberFormat compact) {
     final suggestions = _generateSuggestions(data, compact);
     if (suggestions.isEmpty) return const SizedBox.shrink();
@@ -589,7 +561,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
       InsightsData data, NumberFormat compact) {
     final suggestions = <_Suggestion>[];
 
-    // Find highest-spend category
     if (data.categorySpending.isNotEmpty) {
       final sorted = data.categorySpending.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
@@ -609,7 +580,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
       ));
     }
 
-    // Over-budget category
     for (final budget in data.budgets) {
       final spent = data.categorySpending[budget.categoryid] ?? 0;
       if (spent > budget.allocatedAmount) {
@@ -631,7 +601,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
       }
     }
 
-    // If budget utilization is good
     if (data.budgetUtilizationPercent < 60 && data.totalBudget > 0) {
       suggestions.add(_Suggestion(
         icon: Icons.savings_outlined,
@@ -647,9 +616,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
     return suggestions;
   }
 
-  // ---------------------------------------------------------------------------
-  // Smart Allocation Bottom Banner
-  // ---------------------------------------------------------------------------
   Widget _buildSmartAllocationBanner(InsightsData data) {
     if (data.totalBudget == 0) return const SizedBox.shrink();
 
@@ -687,7 +653,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Circular progress indicator
             Center(
               child: SizedBox(
                 width: 90,
@@ -763,11 +728,7 @@ class _InsightPageState extends ConsumerState<InsightPage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Helpers
-  // ---------------------------------------------------------------------------
   double _calcVelocityDelta(InsightsData data) {
-    // Compare first-half vs second-half of month spending
     final half = data.dailySpending.length ~/ 2;
     if (half == 0) return 0.0;
     final firstHalf =
@@ -779,9 +740,6 @@ class _InsightPageState extends ConsumerState<InsightPage>
   }
 }
 
-// ---------------------------------------------------------------------------
-// _SuggestionCard
-// ---------------------------------------------------------------------------
 class _Suggestion {
   final IconData icon;
   final String title;
@@ -908,3 +866,4 @@ class _SuggestionCard extends StatelessWidget {
     );
   }
 }
+

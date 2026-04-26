@@ -6,6 +6,7 @@ import 'package:mula/core/enum/transaction_type.dart';
 import 'package:mula/features/finance/notifier/budget_notifier.dart';
 import 'package:mula/features/finance/notifier/category_notifier.dart';
 import 'package:mula/features/finance/notifier/transaction_notifier.dart';
+import 'package:mula/features/finance/utils/category_icon_resolver.dart';
 import 'package:mula/features/finance/view/new_category_page.dart';
 import 'package:mula/shared/theme/text_styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -50,15 +51,12 @@ class BudgetsPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Monthly Burn Card
               _buildMonthlyBurnCard(transactionsAsync, budgetsAsync),
               const SizedBox(height: 24),
 
-              // Spending Velocity
               _buildSpendingVelocity(transactionsAsync, budgetsAsync),
               const SizedBox(height: 32),
 
-              // Category Row
               Text(
                 'CATEGORY',
                 style: AppTextStyles.labelSmall.copyWith(color: const Color(0xFF94A3B8), letterSpacing: 1.5),
@@ -81,7 +79,6 @@ class BudgetsPage extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
 
-              // Categories Breakdown Output
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -121,7 +118,7 @@ class BudgetsPage extends ConsumerWidget {
     double totalSpent = 0;
     
     for (final t in transactions) {
-      if (t.type == TransactionType.expense) { // Assuming all expenses burn the budget
+      if (t.type == TransactionType.expense) { 
         totalSpent += t.amount;
       }
     }
@@ -195,7 +192,6 @@ class BudgetsPage extends ConsumerWidget {
     AsyncValue transactionsAsync,
     AsyncValue budgetsAsync,
   ) {
-    // Compute weekly spending (last 7 days, Mon–Sun) from real transactions
     final weeklySpending = List<double>.filled(7, 0.0);
     double totalExpense = 0;
     double totalBudget = 0;
@@ -207,7 +203,6 @@ class BudgetsPage extends ConsumerWidget {
         if (t.type == TransactionType.expense) {
           totalExpense += t.amount as double;
           if (t.date.isAfter(sevenDaysAgo)) {
-            // weekday: 1=Mon … 7=Sun → index 0–6
             weeklySpending[(t.date.weekday - 1).clamp(0, 6)] +=
                 t.amount as double;
           }
@@ -226,7 +221,6 @@ class BudgetsPage extends ConsumerWidget {
     final maxY = weeklySpending.fold(0.0, (m, v) => v > m ? v : m);
     final chartMax = maxY > 0 ? maxY * 1.3 : 10.0;
 
-    // Compute velocity % delta vs previous week (simple heuristic)
     final firstHalf = weeklySpending.take(3).fold(0.0, (s, v) => s + v);
     final secondHalf = weeklySpending.skip(4).fold(0.0, (s, v) => s + v);
     final delta = firstHalf > 0
@@ -420,13 +414,12 @@ class BudgetsPage extends ConsumerWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           if (index == categories.length) {
-            // New Button
             return GestureDetector(
               onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NewCategoryPage())),
               child: Container(
                 width: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFE0E7FF), // Light blue tint
+                  color: const Color(0xFFE0E7FF), 
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
@@ -448,10 +441,7 @@ class BudgetsPage extends ConsumerWidget {
                 builder: (_) => NewCategoryPage(
                   existingCategoryId: cat.id,
                   prefillName: cat.name,
-                  prefillIcon: IconData(
-                    cat.iconCodePoint,
-                    fontFamily: 'MaterialIcons',
-                  ),
+                  prefillIcon: resolveCategoryIcon(cat.iconCodePoint),
                 ),
               ),
             ),
@@ -466,7 +456,7 @@ class BudgetsPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    IconData(cat.iconCodePoint, fontFamily: 'MaterialIcons'),
+                    resolveCategoryIcon(cat.iconCodePoint),
                     color: const Color(0xFF022A72),
                   ),
                   const SizedBox(height: 4),
@@ -513,16 +503,13 @@ class BudgetsPage extends ConsumerWidget {
     final format = NumberFormat.currency(symbol: '\$', decimalDigits: 0);
     final List<Widget> widgets = [];
 
-    // Iterate categories — not budgets — so every category is always visible
     for (final category in categories) {
-      // Find the budget record for this category, if any
       final matchingBudgetsList =
           budgets.where((b) => b.categoryid == category.id);
       final budget =
           matchingBudgetsList.isNotEmpty ? matchingBudgetsList.first : null;
       final bool hasBudget = budget != null;
 
-      // Sum expenses for this category
       double spent = 0;
       for (final t in transactions) {
         if (t.type == TransactionType.expense &&
@@ -557,8 +544,7 @@ class BudgetsPage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
-                      IconData(category.iconCodePoint,
-                          fontFamily: 'MaterialIcons'),
+                      resolveCategoryIcon(category.iconCodePoint),
                       color: const Color(0xFF022A72),
                       size: 20,
                     ),
@@ -645,3 +631,4 @@ class BudgetsPage extends ConsumerWidget {
     return Column(children: limitedWidgets);
   }
 }
+

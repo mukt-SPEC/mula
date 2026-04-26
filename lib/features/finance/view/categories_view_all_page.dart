@@ -6,6 +6,7 @@ import 'package:mula/features/finance/model/category_model.dart';
 import 'package:mula/features/finance/notifier/budget_notifier.dart';
 import 'package:mula/features/finance/notifier/category_notifier.dart';
 import 'package:mula/features/finance/notifier/transaction_notifier.dart';
+import 'package:mula/features/finance/utils/category_icon_resolver.dart';
 import 'package:mula/shared/theme/text_styles.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -75,14 +76,12 @@ class CategoriesViewAllPage extends ConsumerWidget {
       itemBuilder: (context, index) {
         final category = categories[index];
 
-        // Find the budget for this category, if any
         final matchingBudgets =
             budgets.where((b) => b.categoryid == category.id);
         final BudgetModel? budget =
             matchingBudgets.isNotEmpty ? matchingBudgets.first : null;
         final bool hasBudget = budget != null;
 
-        // Sum expenses
         double spent = 0;
         for (final t in transactions) {
           if (t.type == TransactionType.expense &&
@@ -92,7 +91,7 @@ class CategoriesViewAllPage extends ConsumerWidget {
         }
 
         final double budgetLimit =
-            hasBudget ? budget.allocatedAmount : 0.0; // FIX: was budget.amount
+            hasBudget ? budget.allocatedAmount : 0.0; 
         final double progress = hasBudget && budgetLimit > 0
             ? (spent / budgetLimit).clamp(0.0, 1.0)
             : 0.0;
@@ -113,8 +112,7 @@ class CategoriesViewAllPage extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
-                      IconData(category.iconCodePoint,
-                          fontFamily: 'MaterialIcons'),
+                      resolveCategoryIcon(category.iconCodePoint),
                       color: Color(category.colorValue),
                       size: 20,
                     ),
@@ -163,7 +161,6 @@ class CategoriesViewAllPage extends ConsumerWidget {
                   ),
                 ],
               ),
-              // Only show a progress bar when a budget limit has been set
               if (hasBudget) ...[
                 const SizedBox(height: 12),
                 ClipRRect(
@@ -183,3 +180,4 @@ class CategoriesViewAllPage extends ConsumerWidget {
     );
   }
 }
+

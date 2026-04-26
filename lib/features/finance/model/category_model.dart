@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'category_model.g.dart';
 
-@HiveType(typeId: 4) // Assign a new typeId
+@HiveType(typeId: 4) 
 class CategoryModel extends HiveObject {
   @HiveField(0)
   final String id;
@@ -11,15 +11,16 @@ class CategoryModel extends HiveObject {
   final String name;
 
   @HiveField(2)
-  final int iconCodePoint; // Store icon as an integer
+  final int iconCodePoint; 
 
   @HiveField(3)
-  final int colorValue; // Store color as an integer (0xFF...)
+  final int colorValue; 
 
   CategoryModel({
     required this.id,
     required this.name,
-    this.iconCodePoint = 0xe1af, // Default icon
-    this.colorValue = 0xFF4CAF50, // Default color
+    this.iconCodePoint = 0xe1af, 
+    this.colorValue = 0xFF4CAF50, 
   });
 }
+

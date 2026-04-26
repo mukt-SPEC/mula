@@ -28,14 +28,13 @@ class OverviewPage extends ConsumerWidget {
                   padding: const EdgeInsets.all(24.0),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate([
-                      // Header Row
                       Row(
                         children: [
                           const CircleAvatar(
                             radius: 20,
                             backgroundImage: NetworkImage(
                               'https://i.pravatar.cc/150?img=11',
-                            ), // Temporary avatar
+                            ), 
                             backgroundColor: Color(0xFFE2E8F0),
                           ),
                           const SizedBox(width: 12),
@@ -49,7 +48,6 @@ class OverviewPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 24),
 
-                      // Balance Card
                       Container(
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
@@ -142,7 +140,6 @@ class OverviewPage extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            // Income/Expense buttons
                             Row(
                               children: [
                                 Expanded(
@@ -215,11 +212,9 @@ class OverviewPage extends ConsumerWidget {
                       ),
                       const SizedBox(height: 24),
 
-                      // Chart Area
                       _SpendingTrendChart(transactions: transactionsAsync.value ?? []),
                       const SizedBox(height: 32),
 
-                      // Recent Ledger
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -336,7 +331,7 @@ class OverviewPage extends ConsumerWidget {
                 ),
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 100),
-                ), // Bottom padding for FAB
+                ), 
               ],
             ),
           ),
@@ -367,9 +362,6 @@ class OverviewPage extends ConsumerWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Real-data Spending Trend Chart
-// ---------------------------------------------------------------------------
 class _SpendingTrendChart extends StatelessWidget {
   final List<TransactionModel> transactions;
 
@@ -381,7 +373,6 @@ class _SpendingTrendChart extends StatelessWidget {
     final monthStart = DateTime(now.year, now.month, 1);
     final daysInMonth = DateTime(now.year, now.month + 1, 0).day;
 
-    // Build 4 buckets (W1–W4)
     final weekTotals = [0.0, 0.0, 0.0, 0.0];
     for (final t in transactions) {
       if (t.type == TransactionType.expense &&
@@ -501,3 +492,4 @@ class _SpendingTrendChart extends StatelessWidget {
     );
   }
 }
+
